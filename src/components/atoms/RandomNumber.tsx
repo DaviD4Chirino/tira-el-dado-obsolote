@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { getRandomRange } from "app/utils";
 import { useEffect, useState } from "react";
-import { useInterval } from "react-use";
+import { useInterval, useTimeoutFn } from "react-use";
 
 /**
  * Cycles thought the min and max and ends with the finalValue
@@ -9,32 +9,33 @@ import { useInterval } from "react-use";
 export default function RandomNumber({
   min,
   max,
-  rolls,
-  speed,
   finalValue,
+  duration = 2000,
+  speed = 100,
 }: {
   min: number;
   max: number;
-  rolls: number;
+  duration: number;
   speed: number;
   finalValue: number;
 }) {
-  const [rounds, setRounds] = useState(0);
+  const [displayNumber, setDisplayNumber] = useState(0);
+  const [rolling, setRolling] = useState(true);
+
+  useTimeoutFn(() => {
+    setRolling(false);
+  }, duration);
 
   useInterval(
     () => {
-      setRounds(rounds + 1);
+      setDisplayNumber(Math.ceil(getRandomRange(min, max)));
     },
-    rounds >= rolls ? null : speed || 100
+    rolling ? speed : null
   );
 
-  useEffect(() => {
-    return () => {};
-  }, []);
-
   return (
-    <data>
-      {rounds < rolls ? Math.ceil(getRandomRange(min, max)) : finalValue}
+    <data value={rolling ? -1 : finalValue}>
+      {rolling ? displayNumber : finalValue}
     </data>
   );
 }
