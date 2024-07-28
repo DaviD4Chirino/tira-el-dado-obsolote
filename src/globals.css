@@ -9,6 +9,7 @@
 
 :root {
   background: theme(colors.background);
+  color: theme(colors.text);
   box-sizing: border-box;
 }
 
